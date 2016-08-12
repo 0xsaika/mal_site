@@ -54,7 +54,8 @@ def relay(interface,gatewayIp,gatewayMac,victimIp,victimMac,mymac):
 			r = pkt.summary()
 			for a in site_list:
 				r.find(a)
-				with open
+				with open("detect.txt") as f:
+					f.write(str(time.date())+"\t"+a+"\tdetect!!")
 
 	sniff(filter="ether dst "+mymac+" and dst "+gatewayIp,prn=callback,count=0)# and ether dst "+mymac+" and dst "+gatewayIp
 
