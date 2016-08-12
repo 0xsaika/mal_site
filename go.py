@@ -44,6 +44,10 @@ def malsitelist_init():
 		site_list = f.read().split('\n')
 	if site_list[-1] == "":
 		del site_list[-1]
+	j = 0
+	for i in site_list:
+		site_list[j] = i.strip("http://").strip("/")
+		j+=1
 	e = time.time()
 	print "\n[*] mal_site init : "+str(e-s)+" sec\n"
 	print site_list
@@ -52,12 +56,13 @@ def relay(interface,gatewayIp,gatewayMac,victimIp,victimMac,mymac):
 	def callback(pkt):
 		if str(pkt).find('GET'):
 			r = pkt.summary()
+			print r
 			for a in site_list:
-				r.find(a)
-				with open("detect.txt","w") as f:
-					s = str(time.date())+"\t"+a+"\tdetect!!"
-					f.write(s)
-					print s
+				if r.find(a) != -1:
+					with open("detect.txt","w") as f:
+						s = a+"\tdetect!!"
+						f.write(s)
+						print s
 
 	sniff(filter="ether dst "+mymac+" and dst "+gatewayIp,prn=callback,count=0)# and ether dst "+mymac+" and dst "+gatewayIp
 
